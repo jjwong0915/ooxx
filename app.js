@@ -14,7 +14,7 @@ var turn = 0;
 var game = [0,0,0,0,0,0,0,0,0];
 
 app.get('/', function(req, res) {
-	res.sendFile(path.join(__dirname,'white.html'));
+	res.sendFile(path.join(__dirname,'index.html'));
 });
 
 io.on('connection', function(socket) {

@@ -1,11 +1,7 @@
 <html>
 <head>
 	<title>ooxx</title>
-	<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 	<style>
-		body {
-			font-family: 'Ubuntu Mono';
-		}
 		#game {
 			width: 130px;
 		}
@@ -35,12 +31,7 @@
 	<script>
 		var draw = function(game) {}
 		var socket = io('http://localhost:3000');
-		var boxs = document.getElementsByClassName('box');
-		Array.prototype.filter.call(boxs, function(box){
-			box.addEventListener('click', function() {
-				socket.emit('press', box.getAttribute('id'));
-			});
-		});
+		var box = document.getElementsByClassName('box');
 		socket.on('turn', function(game) {
 			console.log('turn '+game);
 			document.getElementById('out').innerHTML = 'Your turn!';
