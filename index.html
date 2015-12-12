@@ -4,25 +4,52 @@
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 	<style>
 		body {
-			font-family: 'Ubuntu Mono', ;
+			font-family: 'Ubuntu Mono';
+		}
+		#game {
+			width: 130px;
+		}
+		.box {
+			display: inline-block;
+			width: 30px;
 		}
 	</style>
 </head>
 <body>
-	<div id="pre">Prepare to start!</div>
+	<div id="out">Prepare to start!</div>
 	<br>
 	<div id="game">
-		<div id="r1">&nbsp;|&nbsp;|&nbsp;</div>
-		<div>-----</div>
-		<div id="r2">&nbsp;|&nbsp;|&nbsp;</div>
-		<div>-----</div>
-		<div id="r3">&nbsp;|&nbsp;|&nbsp;</div>
+		<span class='box' id='1'>&nbsp;</span>|
+		<span class='box' id='2'>&nbsp;</span>|
+		<span class='box' id='3'>&nbsp;</span>
+		<hr>
+		<span class='box' id='4'>&nbsp;</span>|
+		<span class='box' id='5'>&nbsp;</span>|
+		<span class='box' id='6'>&nbsp;</span>
+		<hr>
+		<span class='box' id='7'>&nbsp;</span>|
+		<span class='box' id='8'>&nbsp;</span>|
+		<span class='box' id='9'>&nbsp;</span>
 	</div>
-	<script src="http://cdn.socket.io/socket.io-1.3.7.js">
+	<script src="http://cdn.socket.io/socket.io-1.3.7.js"></script>
 	<script>
-		var socket = io();
-		socket.on('start', function() {
-			document.getElementById('pre').html = '';
+		var draw = function(game) {}
+		var socket = io('http://localhost:3000');
+		var boxs = document.getElementsByClassName('box');
+		Array.prototype.filter.call(boxs, function(box){
+			box.addEventListener('click', function() {
+				socket.emit('press', box.getAttribute('id'));
+			});
+		});
+		socket.on('turn', function(game) {
+			console.log('turn '+game);
+			document.getElementById('out').innerHTML = 'Your turn!';
+			draw(game);
+		});
+		socket.on('wait', function(game) {
+			console.log('wait '+game);
+			document.getElementById('out').innerHTML = "Enemy's turn!";
+			draw(game);
 		});
 	</script>
 </body>
