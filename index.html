@@ -27,18 +27,37 @@
 		<span class='box' id='8'>&nbsp;</span>|
 		<span class='box' id='9'>&nbsp;</span>
 	</div>
-	<script src="http://cdn.socket.io/socket.io-1.3.7.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var draw = function(game) {}
 		var socket = io('http://localhost:3000');
 		var box = document.getElementsByClassName('box');
+		var draw = function(game) {
+			for(var i=0;i<9;i++) {
+				switch(game[i]) {
+					case 0:
+						box[i].innerHTML = '&nbsp;';
+						break;
+					case 1:
+						box[i].innerHTML = 'O';
+						break;
+					case 2:
+						box[i].innerHTML = 'X';
+						break
+				}
+			}
+		}
+		for(var i=0;i<9;i++) {
+			box[i].addEventListener('click', function() {
+				socket.emit('press', this.getAttribute('id'));
+			})
+		}
 		socket.on('turn', function(game) {
-			console.log('turn '+game);
+			console.log('event: turn '+game);
 			document.getElementById('out').innerHTML = 'Your turn!';
 			draw(game);
 		});
 		socket.on('wait', function(game) {
-			console.log('wait '+game);
+			console.log('event: wait '+game);
 			document.getElementById('out').innerHTML = "Enemy's turn!";
 			draw(game);
 		});
