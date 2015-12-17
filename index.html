@@ -3,11 +3,11 @@
 	<title>ooxx</title>
 	<style>
 		#game {
-			width: 130px;
+			width: 100px;
 		}
 		.box {
 			display: inline-block;
-			width: 30px;
+			width: 25px;
 		}
 	</style>
 </head>
@@ -30,6 +30,7 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 		var socket = io('http://localhost:3000');
+		var out = document.getElementById('out');
 		var box = document.getElementsByClassName('box');
 		var draw = function(game) {
 			for(var i=0;i<9;i++) {
@@ -48,17 +49,27 @@
 		}
 		for(var i=0;i<9;i++) {
 			box[i].addEventListener('click', function() {
-				socket.emit('press', this.getAttribute('id'));
+				socket.emit('press', this.getAttribute('id')-1);
 			})
 		}
 		socket.on('turn', function(game) {
 			console.log('event: turn '+game);
-			document.getElementById('out').innerHTML = 'Your turn!';
+			out.innerHTML = 'Your turn!';
 			draw(game);
 		});
 		socket.on('wait', function(game) {
 			console.log('event: wait '+game);
-			document.getElementById('out').innerHTML = "Enemy's turn!";
+			out.innerHTML = "Enemy's turn!";
+			draw(game);
+		});
+		socket.on('win', function(game) {
+			console.log('event: win '+game);
+			out.innerHTML = 'You Win!';
+			draw(game);
+		});
+		socket.on('lose', function(game) {
+			console.log('event: lose '+game);
+			out.innerHTML = 'You lose!';
 			draw(game);
 		});
 	</script>
